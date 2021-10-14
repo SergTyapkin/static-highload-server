@@ -1,0 +1,9 @@
+{
+  "host": "0.0.0.0",
+  "port": 80,
+  "connections_limit": 500,
+  "forks_limit": 1,
+  "name": "SergTyapkin's server",
+  "directory": "/var/www/html",
+  "url_prefix": "/httptest"
+}
