@@ -4,11 +4,8 @@ import socket
 import os
 
 from utils import receive_data
+from HttpParser import HttpParser 
 
-try:
-    from http_parser.parser import HttpParser
-except ImportError:
-    from http_parser.pyparser import HttpParser
 
 ALLOWED_METHODS = ['HEAD', 'GET']
 
@@ -59,13 +56,13 @@ def handle(sock: socket, config: dict):
     parser = HttpParser()
     receive_data(sock, parser)
 
-    method = parser.get_method()
-    parser_path = parser.get_path()
+    method = parser.method
+    parser_path = parser.path
     server_name = config['name']
     static_dir = config['directory']
     url_prefix = config['url_prefix']
 
-    if (not parser.is_headers_complete()) or (not parser_path) or (not parser.get_wsgi_environ()):
+    if (not parser.is_headers_complete) or (not parser_path):
         response(sock, STATUS_BAD_REQUEST, server_name)
         return
 

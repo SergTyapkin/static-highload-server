@@ -23,12 +23,12 @@
 
 ```
 docker build -t server -f Dockerfile .
-docker run -p 80:80 server
+docker run -p 8080:8080 server
 ```
 
 ```
 docker build -t nginx -f nginx.Dockerfile .
-docker run -p 90:90 nginx
+docker run -p 9090:9090 nginx
 ```
 
 --------------------------
@@ -103,7 +103,7 @@ Using: `ab -n requests -c at_same address`
 
 ## This server:80
 Test:
-`ab -n 10000 -c 20 127.0.0.1:80/httptest/wikipedia_russia.html`
+`ab -n 10000 -c 20 127.0.0.1:8080/httptest/wikipedia_russia.html`
 
 <details>
 <summary>Result: <code>Total: min:2 mean:6 [+/-sd]:2.5 median:6 max:24</code><br>
@@ -169,7 +169,7 @@ Test:
 ## Nginx:90
 
 Test:
-`ab -n 10000 -c 20 127.0.0.1:90/httptest/wikipedia_russia.html`
+`ab -n 10000 -c 20 127.0.0.1:9090/httptest/wikipedia_russia.html`
 
 <details>
 <summary>Result: <code>Total: min:41 mean:79 [+/-sd]:12.6 median:78 max:174</code><br>

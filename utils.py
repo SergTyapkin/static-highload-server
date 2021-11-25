@@ -1,19 +1,16 @@
 import socket
 import json
-try:
-    from http_parser.parser import HttpParser
-except ImportError:
-    from http_parser.pyparser import HttpParser
 
+from HttpParser import HttpParser
 
 RECV_TIMEOUT = 20
-BUF_SIZE = 4096
+BUF_SIZE = 1024
 
 
 def receive_data(sock: socket, parser: HttpParser) -> bytes:
     data = b""
     sock.settimeout(RECV_TIMEOUT)
-    while not parser.is_headers_complete():
+    while not parser.is_headers_complete and not parser.is_found_error:
         try:
             chunk = sock.recv(BUF_SIZE)
         except:
@@ -21,7 +18,7 @@ def receive_data(sock: socket, parser: HttpParser) -> bytes:
         if not chunk:
             break
 
-        parser.execute(chunk, len(chunk))
+        parser.execute(chunk)
         data += chunk
         if data.decode().endswith('\n'):
             break
