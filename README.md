@@ -32,6 +32,42 @@ docker run -p 9090:9090 nginx
 ```
 
 --------------------------
+# Really using all cores?
+Yes. Use ```ps -mo pid,tid,%cpu,psr -p `pgrep python` ``` while program running, and see all processes and threads in each of them with core numbers.
+<details><summary>Ran on 8-cores system and 1 thread for every process<br>
+(click to see all)</summary>
+  <code>
+  PID   TID %CPU PSR<br>
+  247     -  0.5   -<br>
+    -   247  0.5   2<br>
+  248     -  0.0   -<br>
+    -   248  0.0   4<br>
+    -   251  0.0   3<br>
+  249     -  0.0   -<br>
+    -   249  0.0   7<br>
+    -   253  0.0   3<br>
+  250     -  0.0   -<br>
+    -   250  0.0   1<br>
+    -   254  0.0   6<br>
+  252     -  0.0   -<br>
+    -   252  0.0   4<br>
+    -   255  0.0   3<br>
+  256     -  0.0   -<br>
+    -   256  0.0   5<br>
+    -   258  0.0   6<br>
+  257     -  0.0   -<br>
+    -   257  0.0   0<br>
+    -   259  0.0   3<br>
+  260     -  0.0   -<br>
+    -   260  0.0   7<br>
+    -   262  0.0   5<br>
+  261     -  0.0   -<br>
+    -   261  0.0   1<br>
+    -   263  0.0   4<br>
+  </code>
+</details>
+
+--------------------------
 # Functional testing
 ### `pyhon3 httptest.py`
 <details><summary>Ran 24 tests in 42.988s - OK<br>
