@@ -5,7 +5,7 @@ import os
 
 from utils import receive_data
 from HttpParser import HttpParser 
-
+from colorize import *
 
 ALLOWED_METHODS = ['HEAD', 'GET']
 
@@ -27,7 +27,18 @@ CONTENT_TYPE = {
 }
 
 
-def response(sock: socket, status: str, server_name: str = '', path: str = '', method: str = ''):
+def response(sock: socket, status: str, server_name: str = '', path: str = '', method: str = '', request_path: str = ''):
+    if method == "GET":
+        green()
+    elif method == "HEAD":
+        yellow()
+    else:
+        red()
+    if status != STATUS_OK:
+        underline()
+    print(os.getpid(), ":", method, request_path)
+    default()
+    
     body = b''
     content_length = 0
     last_modified = ''
@@ -63,7 +74,7 @@ def handle(sock: socket, config: dict):
     url_prefix = config['url_prefix']
 
     if (not parser.is_headers_complete) or (not parser_path):
-        response(sock, STATUS_BAD_REQUEST, server_name)
+        response(sock, STATUS_BAD_REQUEST, server_name, request_path=parser_path)
         return
 
     try:
@@ -72,14 +83,14 @@ def handle(sock: socket, config: dict):
         pass
 
     if not parser_path.startswith(url_prefix):
-        response(sock, STATUS_NOT_FOUND, server_name)
+        response(sock, STATUS_NOT_FOUND, server_name, request_path=parser_path)
         return
     path = static_dir + parser_path[len(url_prefix):]
     if method not in ALLOWED_METHODS:
-        response(sock, STATUS_METHOD_NOT_ALLOWED, server_name)
+        response(sock, STATUS_METHOD_NOT_ALLOWED, server_name, request_path=parser_path)
         return
     if parser_path.find('../') != -1:
-        response(sock, STATUS_FORBIDDEN, server_name)
+        response(sock, STATUS_FORBIDDEN, server_name, request_path=parser_path)
         return
     it_was_dir = False
     if (path[-1] == '/') and os.path.isdir(path):
@@ -87,9 +98,9 @@ def handle(sock: socket, config: dict):
         it_was_dir = True
     if not os.path.isfile(path):
         if it_was_dir:
-            response(sock, STATUS_FORBIDDEN, server_name)
+            response(sock, STATUS_FORBIDDEN, server_name, request_path=parser_path)
             return
-        response(sock, STATUS_NOT_FOUND, server_name)
+        response(sock, STATUS_NOT_FOUND, server_name, request_path=parser_path)
         return
 
-    response(sock, STATUS_OK, server_name, path, method)
+    response(sock, STATUS_OK, server_name, path, method, request_path=parser_path)

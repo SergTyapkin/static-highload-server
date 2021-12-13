@@ -44,9 +44,9 @@ def run_server(config):
 
     processes = []
     for i in range(1, process_limit + 1):
-        print("Process", i, "started")
         process = multiprocessing.Process(target=run_process, args=(sock, config))
         process.start()
+        print("Process #", process.pid, " started", sep="")
         processes += [process]
 
     for process in processes:

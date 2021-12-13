@@ -1,9 +1,9 @@
 {
   "host": "0.0.0.0",
-  "port": 8080,
+  "port": 8081,
   "connections_limit": 500,
-  "threads_limit": 5,
-  "process_limit": -1,
+  "threads_limit": 1,
+  "process_limit": 4,
   "name": "SergTyapkin's server",
   "directory": "/var/www/html",
   "url_prefix": "/httptest"
